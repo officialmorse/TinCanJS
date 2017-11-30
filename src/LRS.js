@@ -20,7 +20,7 @@ TinCan client library
 @module TinCan
 @submodule TinCan.LRS
 **/
-(function ($) {
+(function () {
     "use strict";
     /**
     @class TinCan.LRS
@@ -369,25 +369,8 @@ TinCan client library
 
             try {
                 versionedStatement = stmt.asVersion( this.version );
-
-                $.ajax({
-                    url : this.endpoint + requestCfg.url,
-                    type: "PUT",
-                    data: JSON.stringify(versionedStatement),/* Encode data compatible with the latest version of TinCan LRS */
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function(data){
-                        if (!data.success) {
-                            throw data.message.length > 0 ? data.message[0] : data.message;
-                        }
-                        if (data.success && typeof cfg.callback !== "undefined") {
-                            cfg.callback(null, null);
-                            return;
-                        }                     
-                    }
-                });
-
-            } catch (ex) {
+            }
+            catch (ex) {
                 if (this.allowFail) {
                     this.log("[warning] statement could not be serialized in version (" + this.version + "): " + ex);
                     if (typeof cfg.callback !== "undefined") {
@@ -410,11 +393,6 @@ TinCan client library
                     xhr: null
                 };
             }
-
-            return {
-                err: null,
-                xhr: null
-            };
 
             if (versionedStatement.hasOwnProperty("attachments") && stmt.hasAttachmentWithContent()) {
                 boundary = this._getBoundary();
@@ -631,7 +609,8 @@ TinCan client library
             for (i = 0; i < stmts.length; i += 1) {
                 try {
                     versionedStatement = stmts[i].asVersion( this.version );
-                } catch (ex) {
+                }
+                catch (ex) {
                     if (this.allowFail) {
                         this.log("[warning] statement could not be serialized in version (" + this.version + "): " + ex);
                         if (typeof cfg.callback !== "undefined") {
@@ -665,28 +644,6 @@ TinCan client library
 
                 versionedStatements.push(versionedStatement);
             }
-
-            $.ajax({
-                url : this.endpoint + requestCfg.url,
-                type: "PUT",
-                data: JSON.stringify(versionedStatements),/* Encode data compatible with the latest version of TinCan LRS */
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function(data){
-                    if (!data.success) {
-                        cfg.callback(data.message.length > 0 ? data.message[0] : data.message, null);
-                    }
-                    if (data.success && typeof cfg.callback !== "undefined") {
-                        cfg.callback(null, null);
-                        return;
-                    }                     
-                }
-            });           
-
-            return {
-                err: null,
-                xhr: null
-            };
 
             if (requestAttachments.length !== 0) {
                 boundary = this._getBoundary();
@@ -2312,4 +2269,4 @@ TinCan client library
     @static this is a static property, set by the environment
     */
     LRS.syncEnabled = null;
-}(window.jQuery));
+}());
