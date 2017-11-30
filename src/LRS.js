@@ -282,7 +282,7 @@ TinCan client library
                     }
                 }
             }
-
+            
             // consolidate headers
             headers.Authorization = this.auth;
             if (this.version !== "0.9") {

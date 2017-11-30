@@ -298,6 +298,8 @@ TinCan client library
             }
         }
 
+        xhr.withCredentials = true;
+
         xhr.open(cfg.method, fullUrl, async);
 
         //
